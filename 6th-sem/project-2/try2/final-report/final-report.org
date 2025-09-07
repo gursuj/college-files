@@ -152,23 +152,26 @@ and then the answer on the next side. The following is an example of what a flas
 #+CAPTION:Example Flashcard
 [[file:diagrams/flashcard-example.png]]
 
-To utilize this flashcard, we would read the question & try to remember the answer.
-Then, we flip the card over & see how well we remembered it.
-CardsQL is a web app that digitises this technique. The name is derived from a combination of Flashcards & SQL.
-It allows you to create cards by entering the text on the front side (usually, the question) and the text on the back(the
-answer). Each card is stored in a database along with some metadata. Users can then practice/review created cards, where
-CardsQL will show only the question at first and prompt the user to remember the answer. After attempting to remember it,
-users can press a button to reveal the answer.
+To utilize this flashcard, we would:
+1. read the question
+2. try to remember the answer.
+3. then, flip the card & see how well we remembered it.
 
-Users can then rate how well they remembered it, and this rating is sent to an algorithm to decide when the card should
-be reviewed again. This algorithm, along with a few scientific theories related to making such a revision technique
+CardsQL is a web app that digitises this technique in the following ways: 
+1. Users can create cards by entering question, answer text 
+2. Each card is stored in a database along with some metadata.
+3. Users can then practice/review cards,
+   + Only the question is shown at first and user is prompted to remember the answer.
+   + After attempting to remember it, users can press a button to reveal the answer.
+4. Users can rate how well they remembered it,
+   + rating is sent to an algorithm to decide when the card should be practiced again.
+
+This algorithm, along with a few scientific theories related to making such a revision technique
 effective, is discussed in [[*Background Study and Literature Review][_Chapter 2_]]. Thus, instead of re-reading the same study materials, users can just create 
 cards once and study them regularly, while retaining that knowledge for much longer. The proof for flashcarcds allowing
 for longer memory retention is also discussed in that chapter.
 
-CardsQL maintains review dates for cards so there is no need to study every card everyday. It sets review date such that
-when we revise a card on that day, it isn't too hard nor is it too easy. As such, users only need to use CardsQL a little
-bit every day to revise effectively.
+CardsQL is designed such that users only need to use it for a short time regularly, in order to revise topics effectively. When revising, the app will only show questions that the user is struggling with or may have forgotten. 
 
 ** Problem Statement
 + *inefficient traditional studying techniques*
@@ -179,20 +182,20 @@ bit every day to revise effectively.
   - Storing cards digitally allows them to be physically secure & portable.
 
 + *cumbersome to schedule, keep track of next repition for cards*   
-  - After reviewing/ recalling a card, we need to schedule when to practice it again.
+  - After reviewing a card, we need to schedule when to practice it again.
     We not only need to keep track of its schedule, but also remember to review it on that day.
     If we forget to do so, then keeping track of overdue cards adds another layer of unneeded complexity.
 
 ** Objectives
-- Create an easy to use flashcard program.
-- Promote regular study habit among students by making it effortless and quick to do.
-- Improve rate of retaining studied knowledge among users
+- To create an easy to use flashcard program.
+- To promote regular study habit among students by making it effortless and quick.
+- To improve rate of retaining studied knowledge among users
 
 ** Scope and Limitation
 *** Scope
 CardsQL would be appropriate for the following types of users:
-- Students ranging from high schooolers to Doctorates, as they have to understand and memorize a lot of concepts.
-- People learning a new language. Applications like *Dulingo, Anki* that use question-answer based learning are popularly
+- Students ranging from high schooolers to Doctorates, as they have to understand and memorize a lot of concepts. Flashcard applications like *Remnote, Anki* are popular among college students, especially those in medical fields.
+- People learning a new language. Applications like *Duolingo, Anki* that use question-answer based learning are popularly
   used for this purpose.
 - People, in general, that want to retain their knowledge.
 *** Limitation
@@ -201,22 +204,20 @@ CardsQL would be appropriate for the following types of users:
 - Initial setup process of installing dependencies and running a web server from the command line may be jarring for
   non-technical users.
 - Databse backups haven't been implemented due to time constraints.
-- Currently, all flashcards are stored in a single table in the database. This may become unorganized after a large number
+- Currently, all flashcards are stored in a single table in the database. This may become unorganized or have performance issues after a large number
   of cards are added.
 ** Report Organization
 # summary of each following chapter and its contents
 The project is explained across 5 major chapters in this report.
 This section is part of [[*Introduction][_Chapter 1_]], which serves as an introduction to the project. It explains what CardsQl basically
-does and the probelsm it sets out to achieve. The chapter also talks about suitable users for CardsQL and some of its
+does and the problems it sets out to achieve. The chapter also talks about suitable users for CardsQL and some of its
 current limitations to get a better understanding of the project.
 [[*Background Study and Literature Review][_Chapter 2_]] describes some theories, scientific concepts, and an algorithm related to the project. These provide a
 scientific basis for the effectiveness of CardsQL in enhancing learning. It also includes an analysis of two similar
 existing products, and lists out their advantages and disadvantages that differ it from this project. 
 
 [[*System Analysis and Design][_Chapter 3_]] goes through the results of the initial planning and design phase of the project, such as identifying
-requirements and figuring out various designs for making CardsQL work. These phases were carried out before starting
-development on the project so that development would go smoothly later.
-[[*Implementation and Testing][_Chapter 4_]] similarly describes how the plans were implemented and briefly goes through the inner workings of the project.
+requirements and figuring out various designs for making CardsQL work. [[*Implementation and Testing][_Chapter 4_]] similarly describes how the plans were implemented and briefly goes through the inner workings of the project.
 It also lists some test measures put in place to ensure that the application works smoothly and users don't face any
 hindrances.
 [[*Conclusion and Future Recommendation][_Chapter 5_]] concludes this report, talking about the objectives it meets and future improvements that can be made.
@@ -266,6 +267,7 @@ The results show that just testing ourselves once on what we learned yields bett
 four times, while also taking far less time to do so. This also proves the previously discussed scientific concepts.
 Thus, testing ourselves using flashcards is a far more effective way to study.
 
+#+latex: \pagebreak
 *** Study of existing system
 Two popular flashcard apps are:
 
@@ -300,7 +302,8 @@ Two popular flashcard apps are:
 # - can reset review date for all cards
 **** Use Case diagram
 
-#+begin_src plantuml :file diagrams/use-case-diagram.svg
+# +begin_src plantuml :file diagrams/use-case-diagram.svg :exports results  
+#+begin_src plantuml :file diagrams/use-case-diagram.svg :exports none  
   @startumL
   left to right direction
   skinparam 300 dpi
@@ -314,17 +317,16 @@ Two popular flashcard apps are:
           u --> (CC)
           u --> (RC)
           u --> (EC)
-          (RC) .left.> (CC) :<<includes>>
           (DC) .left.> (EC) :<<extends>>
   }
   @enduml
 #+end_src
 
-#+RESULTS:
+# +RESULTS:
 #+CAPTION: Use case diagram for CardsQL
 #+attr_latex: :height 150px
 #+attr_org:   :height 150px
-[[file:diagrams/use-case-diagram.svg]]
+[[file:diagrams/use-case-diagram.png]]
 
 #+LATEX:\FloatBarrier
 **** Non-Functional requirements
@@ -375,7 +377,7 @@ for maintaining a server for users to connect to.
 CardsQl is viable from an economic standpoint as:
 
 - There are no additional costs for web hosting, server maintenance etc.
-- There were no development costs as weonly used existing hardware & freely-licensed tools. 
+- There were no development costs as we only used existing hardware & freely-licensed tools. 
 - The app is distributed freely to help users & doesn't have any profit incentives.
 
 *** Data Modeling
@@ -414,7 +416,7 @@ stores. It also shows how data flows between processes, data stores and users.
 # +LATEX:\FloatBarrier
 
 *** Database Schema Design 
-#+begin_src plantuml :file diagrams/database-schema.svg 
+#+begin_src plantuml :file diagrams/database-schema.svg  :exports results
   @startuml
   skinparam Padding 2
   entity "cards" {
@@ -461,7 +463,7 @@ executing SQL queries on the database using submitted data. This is also done wi
 The following Computer Aided Software Engineering(CASE) tools were used during the project's development:
 **** Presentation layer
 - HTML was used for structuring the webpage and its contents.
-- Plain CSS, i.e. without any frameworks, was used for appplying styling and decorations.
+- CSS, without any frameworks, was used for appplying styling and decorations.
 **** Logic layer
 - JavaScript is used for client-side interactivity & DOM manipulation such as showing card answer only when button is
   clicked, populating edit dialog's values according to selected card etc.
@@ -483,7 +485,7 @@ SuperMemo is a learning software that implements the afore-mentioned *Active Rec
 *Spaced Repitition*[cite:@spaced_repetition] methods. It uses an underlying algorithm for
 calculating when the next repetition/ revision date for a flashcard should be. The algorithm differs across versions
 but the SM-2 algorithm[cite:@sm_2] is popular among other flashcard software.
-CardsQL uses a slightly modified version of SM-2, described below.
+CardsQL uses a modified version of SM-2, described below.
 
 While practicing flashcards, users can rate how well they were able to remember the answer.
 The rating/ quality of a review is represented by =Q=.
@@ -502,14 +504,14 @@ The rating/ quality of a review is represented by =Q=.
 SM-2 also tracks three properties for all cards: 
 
 - The repetition number =N=, which is the consecutive number of times the card has been successfully recalled
-  (meaning Q \ge 2).  Rating a card below 2 will thus reset =N= to 0.
+  (meaning Q \ge 2).  Rating a card below 2 resets =N= to 0.
 - The interval =I=, which is the number of days after which the card should be reviewed again (to negate the forgetting
   curve). CardsQL sets next review date = previous review date(i.e. today) + =I=.
 - The easiness factor =EF=, which loosely indicates how "easy" the card is (More precisely, it determines how quickly the
   interval grows). The initial value of =EF= for all cards is 2.5.
 
   Due to the formula used, =EF= value should be ~>=1.3~ so that a card's review isn't scheduled too frequently and isn't too easy.
-  Similarly, it should be ~<=2.5~ so that it isn't scheduled so far into the future that we've forgotten the answer completely by then. 
+  Similarly, it should be ~<=2.5~ so that it isn't scheduled so far into the future that we've forgotten the answer completely. 
 
 The main algorithm is as follows:
 # algorithm isn't actually ruby code. I just specified the language for syntax highlighting
@@ -583,7 +585,7 @@ The test cases are successful because of the following measures put in place:
   #+begin_src php
     $rating = $rating < 0 ? 0 : ($rating > 3 ? 3 : $rating);
   #+end_src
-  If rating is below, it's set to 0 and if it is above 3 it's set to 3.
+  If rating is below 0, it's set to 0 and if it is above 3, it's set to 3.
 - For Test 3, code similar to above is used to keep =EaseFactor= value in check.
 - Test case 4 is possible due to src_sql{where scheduledDate <= CURRENT_DATE} condition while querying the database.
   This behavior comes in handy if a user misses reviewing a card on its scheduled date. They can just review/ practice it
@@ -598,13 +600,13 @@ projects are worked upon and will surely help me in our career.
 ** Conclusion
 Thus, we believe CardsQl has met the following goals it set out to achieve:
 
-- Provide a simple introduction to using flashcards, active recall & spaced repititon for learning
+- Provide a simple introduction to using flashcards & spaced repititon for learning
 - Eliminate the need to constantly read or make notes on the same topics
 - Help make studying an effortless, daily habit
 
 We hope that students and other learners can study effectively through CardsQL and be able to retain what they learn for
-longer periods of time. Students and programmers might also take inspiration to build their own flashcard app, either
-simple or complex. Building projects like this is a great way to learn new things as well as solidify previously learned
+longer periods of time. Students and programmers might also take inspiration to build their own flashcard app.
+Building projects like this is a great way to learn new things as well as solidify previously learned
 programming concepts. As such, we are grateful to have completed this project as part of our coursework.
 
 ** Future recommendation
@@ -615,8 +617,6 @@ Some improvements that can be made to CardsQL are:
   By default, the question is asked first and then the answer is shown. Some flashcard software allow setting different
   directions like backwards direction, where, for example: a term's definition may be shown and the user has to remember the
   term. This provides a new way to test our knowledge.
-
-  Currently, users can specify direction while creating cards, but it hasn't been implemented in the review page.
 - Allow grouping cards by subject or topic
 - Create tutorial or documentation for users to understand how to use it.
 - Allow setting daily target/limit so that users are motivated to at least meet the target as well as not be overwhelmed
