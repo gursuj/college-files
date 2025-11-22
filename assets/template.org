@@ -9,16 +9,16 @@
 #+LATEX_HEADER: \graphicspath{{~/programming/college-files/assets/images/}}
 
 # !!!!!!!!!!!!!          only edit this section       !!!!!!
-#+LATEX_HEADER: \def\subjectNum{3}
-# 1: DBA
-# 2: AI
-# 3: Cloud
+#+LATEX_HEADER: \def\subjectNum{1}
+# 1: DBProg
+# 2: Media
+# 3: none
 # 4: none
 # 5: none
 
 #+LATEX_HEADER: \def\labNum{1}
 #+LATEX_HEADER: \def\labTitle{Escape ampersand \&}
-#+LATEX_HEADER: \def\yearSem{III/VII}
+#+LATEX_HEADER: \def\yearSem{IV/VIII}
 #+LATEX_HEADER: \newif \iftoc
 # !!!!!!!!!!!!           set toc here by uncommenting option
 # \toctrue    
@@ -33,29 +33,21 @@
 #+LaTeX_HEADER: \AtBeginDocument{\fontsize{12}{15}\selectfont}
 #+LATEX_HEADER: \newcommand{\subject}[1]{%
 #+LATEX_HEADER:     \ifnum#1=1
-#+LATEX_HEADER:         Database Administration
+#+LATEX_HEADER:         Database Programming
 #+LATEX_HEADER:     \else\ifnum#1=2
-#+LATEX_HEADER:         Artificial Intelligence
-#+LATEX_HEADER:     \else\ifnum#1=3
-#+LATEX_HEADER:         Cloud Computing
-#+LATEX_HEADER:     \else\ifnum#1=4
-#+LATEX_HEADER:         <Insert Subject no.>
+#+LATEX_HEADER:         Multimedia System
 #+LATEX_HEADER:     \else
 #+LATEX_HEADER:         <Insert Subject no.>
-#+LATEX_HEADER:     \fi\fi\fi\fi
+#+LATEX_HEADER:     \fi\fi
 #+LATEX_HEADER: }
 #+LATEX_HEADER: \newcommand{\teacher}[1]{%
 #+LATEX_HEADER:     \ifnum#1=1
-#+LATEX_HEADER:         Er. Nawaraj Singh Thakuri
+#+LATEX_HEADER:         Er. Himal Chand Thapa
 #+LATEX_HEADER:     \else\ifnum#1=2
-#+LATEX_HEADER:         Er. Kashiram Pokharel
-#+LATEX_HEADER:     \else\ifnum#1=3
-#+LATEX_HEADER:         Mr. Surya Basnet
-#+LATEX_HEADER:     \else\ifnum#1=4
-#+LATEX_HEADER:         <Insert name>
+#+LATEX_HEADER:         
 #+LATEX_HEADER:     \else
 #+LATEX_HEADER:         <Insert name>
-#+LATEX_HEADER:     \fi\fi\fi\fi
+#+LATEX_HEADER:     \fi\fi
 #+LATEX_HEADER: }
 
 # title doesn't work so just use labString for title
