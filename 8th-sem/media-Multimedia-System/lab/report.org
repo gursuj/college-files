@@ -1,0 +1,97 @@
+# for project documents, use addtional latex styles used in final-report file
+:edit-this:
+#+EXPORT_FILE_NAME: media-report
+#+PROPERTY: header-args :eval no-export
+# don't prompt to evaluate code blocks while exporting
+#+OPTIONS: toc:nil ^:{}
+# set toc below instead of here
+# 2nd option exports subscripts only when _{} is used
+#+LATEX_HEADER: \graphicspath{{~/programming/college-files/assets/images/}}
+
+# !!!!!!!!!!!!!          only edit this section       !!!!!!
+#+LATEX_HEADER: \def\subjectNum{2}
+# 1: DBProg
+# 2: Media
+# 3: none
+# 4: none
+# 5: none
+
+#+LATEX_HEADER: \def\labNum{}
+#+LATEX_HEADER: \def\labTitle{}
+#+LATEX_HEADER: \def\yearSem{IV/VIII}
+#+LATEX_HEADER: \newif \iftoc
+# !!!!!!!!!!!!           set toc here by uncommenting option
+# \toctrue    
+\tocfalse
+:end:
+
+#+INCLUDE: "~/programming/college-files/assets/template.org" :lines "27-"
+# custom date to show in title
+#+DATE: August 25, 2025
+* Objectives
+- To learn the basics of Blender, its interface, and the tools used for 3D modeling, texturing, lighting, and rendering.
+- To be able to create basic 3d objects in Blender by combining and modifying primitive shapes.
+
+* Introduction 
+Multimedia combines different forms of content such as text, images, audio, video, and interactive elements to create richer communication and user experiences. As digital media has advanced, three dimensional content has become an important part of multimedia as it provides depth, realism, and greater visual engagement.
+#+LATEX:\newline
+
+3D multimedia involves creating virtual objects and environments that can be viewed, animated, or interacted with from any angle. It is widely used in films, games, simulations, education, architecture, product design, and advertising. The use of lighting, materials, and physics helps achieve visuals that closely resemble real life.
+#+LATEX:\newline
+
+Blender is a powerful open source 3D creation suite that supports the entire 3D pipeline including modelling, sculpting, texturing, rigging, animation, rendering, compositing, and basic video editing. Its integrated render engines, Cycles and Eevee, allow both realistic and real time rendering. Because it is free, versatile, and supported by a large community, Blender is commonly used in academic settings and professional workflows for learning and producing 3D multimedia content.
+
+* Lab Work
+** Create a 3D table in Blender
+A simple table can be created in Blender by starting with basic cubes and reshaping them into parts like the tabletop and legs. This approach helps beginners understand how most 3D models start from simple geometry and are refined through basic transformations, giving a clear and practical introduction to working with objects in a three dimensional space.
+#+LATEX:\newline
+
+**Steps:**
+1) Create a new project in Blender
+2) Select the cube
+3) Flatten and lengthen it using the Scale tool (S) to create the top
+   #+attr_latex: :height 220px
+   [[file:img/1.png]]
+4) Add a new cube to make the table leg
+5) Scale it on the Z-axis to be tall
+6) Move it to below the table top using the move tool (G)
+7) Duplicate it three times using Shift+D
+8) Move the other table legs in the appropriate position
+9) Add materials if needed to color it
+
+**Output:**
+ #+attr_latex: :height 220px
+ [[file:img/2.png]]
+
+#+LATEX: \pagebreak
+** Create a 3D glass in Blender
+A glass can be created by starting with a basic cylinder, then extruding and scaling its faces to create the rim, and hollow interior. Applying a glass material helps us understand shaders and how transparency works, while adding lighting shows how reflections and refraction affect the final look. 
+#+LATEX:\newline
+
+**Steps:**
+1. Launch Blender and create a fresh scene.
+2. Remove the default cube by selecting it and pressing X to delete.
+3. Build the base plate by adding a Cylinder from the Mesh menu.
+4. Flatten it by scaling along the Z axis, then widen it to form a round plate.
+ #+attr_latex: :height 220px
+ [[file:img/3.png]]
+
+5. Model the glass by adding another Cylinder and stretching it upward to form the main body.
+6. Enter Edit Mode, select the top face, extrude it slightly, and scale inward to create the rim.
+7. Extrude downward to form the hollow interior.
+8. Move the glass upward along the Z axis until it sits correctly on the plate.
+ #+attr_latex: :height 220px
+ [[file:img/4.png]]
+
+9. Switch back to Object Mode.
+10. Set up the glass material. Open the Material panel with the glass selected and add a new material.
+11. Choose Glass BSDF as the shader and set the IOR to about 1.45.
+12. Lower Roughness if you want a clearer appearance.
+13. Add lighting and a surface. Insert an Area Light above the glass and increase its intensity for reflections.
+14. Place a Plane underneath to serve as the table or ground surface.
+
+**Output**:  
+ #+attr_latex: :height 220px
+ [[file:img/5.png]]
+* Conclusion
+This lab provided a practical introduction to Blender’s core features and workflow. By navigating the interface, manipulating primitive shapes, and applying essential tools for modelling, texturing, lighting, and rendering, the foundational concepts of 3D creation were reinforced through hands-on tasks. Constructing simple objects like a table and a glass demonstrated how complex models can grow from basic forms, helping build confidence in shaping geometry and preparing for more advanced 3D work.

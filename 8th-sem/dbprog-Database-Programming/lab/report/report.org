@@ -1,0 +1,466 @@
+# for project documents, use addtional latex styles used in final-report file
+:edit-this:
+#+EXPORT_FILE_NAME: dbprog-report
+#+PROPERTY: header-args :eval no-export
+# don't prompt to evaluate code blocks while exporting
+#+OPTIONS: toc:nil ^:{}
+# set toc below instead of here
+# 2nd option exports subscripts only when _{} is used
+#+LATEX_HEADER: \graphicspath{{~/programming/college-files/assets/images/}}
+
+# !!!!!!!!!!!!!          only edit this section       !!!!!!
+#+LATEX_HEADER: \def\subjectNum{1}
+# 1: DBProg
+# 2: Media
+# 3: none
+# 4: none
+# 5: none
+
+#+LATEX_HEADER: \def\labNum{}
+#+LATEX_HEADER: \def\labTitle{}
+#+LATEX_HEADER: \def\yearSem{IV/VIII}
+#+LATEX_HEADER: \newif \iftoc
+# !!!!!!!!!!!!           set toc here by uncommenting option
+# \toctrue    
+\tocfalse
+:end:
+
+#+INCLUDE: "~/programming/college-files/assets/template.org" :lines "27-"
+# custom date to show in title
+#+DATE: August 27, 2025
+* Lab 1: Conditional Statements
+** Objectives
+- To learn to use PL/SQL conditional statements
+** Theory
+Conditional statements in PL/SQL, primarily using the IF and CASE statements, are essential for controlling program flow and implementing decision-making logic. The basic IF...THEN structure executes code only when a Boolean condition is TRUE. More complex logic is handled by IF...ELSIF...ELSE chains, which check multiple mutually exclusive conditions sequentially, or by the CASE structure, which offers a cleaner syntax for comparing a single value against multiple possibilities. 
+
+** Lab Work
+*Insert data into a table employees, and display data meeting a condition*
+
+#+begin_src sql
+  CREATE TABLE employees(
+      emp_id NUMBER,
+      emp_name VARCHAR2(50),
+      salary NUMBER
+  );
+
+  INSERT INTO employees VALUES(1, 'Sujal', 2500);
+  INSERT INTO employees VALUES(2, 'Suman', 3000);
+  INSERT INTO employees VALUES(3, 'Sujan', 3000);
+
+  DECLARE
+    v_emp_id employees.emp_id%TYPE;
+    v_emp_name employees.emp_name%TYPE;
+    v_salary employees.salary%TYPE;
+BEGIN
+    FOR emp_rec IN (SELECT * FROM employees) LOOP
+        IF emp_rec.salary > 25000 THEN
+            DBMS_OUTPUT.PUT_LINE ('Name: ' || emp_rec.emp_name || ', Salary: ' || emp_rec.salary);
+        END IF;
+    END LOOP;
+END;
+#+end_src
+
+**Output:**
+#+begin_src sh
+  Name: Suman, Salary: 30000
+  Name: Sujan, Salary: 30000
+#+end_src
+** Conclusion
+Thus, we were able to implement conditional logic in PL/SQL to perform actions only when specific conditions were met. 
+
+#+LATEX: \pagebreak
+* Lab 2: Repetitive Control in PL/SQL
+** Objectives
+- to learn about & implement different types of repititive control structures in PL/SQL
+** Theory
+PL/SQL uses repetitive control structures (loops) to execute a block of code multiple times, which is fundamental for tasks like processing arrays or iterating over database result sets. The three primary types include the simplest =LOOP= (which requires an explicit =EXIT WHEN= condition), the =WHILE= loop (which evaluates a condition at the beginning of each iteration), and the highly efficient =FOR= loop. The =FOR= loop is generally preferred as it is well-suited for iterating through a sequence of numbers or, crucially, for processing rows returned by a SQL query (known as a Cursor FOR Loop). The Cursor FOR Loop is particularly powerful as it automatically manages the complex steps of opening, fetching, and closing the database cursor, significantly simplifying data iteration within the PL/SQL environment.
+** Lab Work
+*Use different loop types for printing sequnces of numbers*
+
+#+begin_src sql
+  DBMS_OUTPUT.PUT_LINE ('For loop');
+  FOR J IN 1..5 LOOP
+      DBMS_OUTPUT.PUT_LINE ('J = ' || J);
+  END LOOP;
+
+  DBMS_OUTPUT.PUT_LINE ('Simple loop');
+  DECLARE
+      K NUMBER := 1;
+  BEGIN
+      LOOP
+          DBMS_OUTPUT.PUT_LINE ('K = ' || K);
+          K := K + 1;
+          EXIT WHEN K > 5;
+      END LOOP;
+  END;
+
+  DECLARE
+      I NUMBER := 1;
+  BEGIN
+      DBMS_OUTPUT.PUT_LINE ('While loop');
+      WHILE I <= 5 LOOP
+          DBMS_OUTPUT.PUT_LINE ('I = ' || I);
+          I := I + 1;
+  END LOOP;
+
+  DBMS_OUTPUT.PUT_LINE ('Nested loop with CONTINUE and label');
+  <<outer_loop>>
+  FOR A IN 1..3 LOOP
+      <<inner_loop>>
+      FOR B IN 1..3 LOOP
+          IF B = 2 THEN
+              CONTINUE;
+          END IF;
+          DBMS_OUTPUT.PUT_LINE ('a = ' || a || ', b = ' || b);
+      END LOOP;
+  END LOOP;
+  END;
+/
+#+end_src
+
+**Output:**
+#+begin_src sh
+While Loop:
+I = 1
+I = 2
+I = 3
+I = 4
+I = 5
+
+For Loop:
+J = 1
+J = 2
+J = 3
+J = 4
+J = 5
+
+Simple Loop:
+K = 1
+K = 2
+K = 3
+K = 4
+K = 5
+
+Nested Loop with CONTINUE and label:
+a = 1, b = 1
+a = 1, b = 3
+a = 2, b = 1
+a = 2, b = 3
+a = 3, b = 1
+a = 3, b = 3
+#+end_src
+** Conclusion
+Thus, we learned about and implemented different types repititive control flows in PL/SQL to perform actions repeatedly, and when each type would be useful.
+#+LATEX: \pagebreak
+* Lab 3: Exception Handling
+** Objectives
+- To learn how to create user-defined exceptions, raise them manually and demonstrate how exception propagation works in nested PL/SQL blocks.
+** Theory
+User-defined exceptions in PL/SQL allow developers to handle specific error conditions that Oracle does not provide by default. By declaring and raising these exceptions manually, you gain finer control over program flow and error handling. Understanding how exceptions propagate through nested PL/SQL blocks is also important because it shows how errors move from inner blocks to outer blocks when not handled locally. This helps in writing clear, predictable, and maintainable PL/SQL programs.
+** Lab Work
+#+begin_src sql
+DECLARE
+    min_age EXCEPTION;
+    age NUMBER := 16;
+BEGIN
+    BEGIN
+        IF age < 18 THEN
+            RAISE min_age;
+        END IF;
+    END;   
+
+EXCEPTION
+    WHEN min_age THEN
+        DBMS_OUTPUT.PUT_LINE('Exception caught in outer block: min_age not met');
+END;
+/
+#+end_src
+
+**Output:**
+#+begin_src text
+Exception caught in outer block: min_age not met
+#+end_src
+
+Here, the exception is defined in the declaration section as min_age,then raised inside the inner block when the age is checked and found to be below the required level. Because the inner block has no handler, the error automatically propagates outward to the enclosing block, where it is finally caught and handled in the outer EXCEPTION section.
+** Conclusion
+This lab demonstrated how to declare a user-defined exception, raise it within a nested block, and observe how it propagates when not handled locally. By testing the behavior inside inner and outer blocks, the exercise showed how PL/SQL passes unhandled exceptions outward until a matching handler is found. Through this, we learned how to perform basic error handling in PL/SQL.
+
+#+LATEX: \pagebreak
+* Lab 4: Explicit and Parameterized cursors
+** Objectives
+- To learn about and implement cursors for handling queried data
+- To utilize parameterized cursors to create dynamic, reusable curors
+** Theory
+A cursor in PL/SQL is a pointer that allows row by row processing of query results. Oracle automatically manages cursors for single row queries, but when working with multi-row result sets, explicit cursors provide control over opening, fetching, and closing the result set.
+A parameterized cursor behaves like a function that accepts arguments. It allows passing values at runtime to filter or customize the query, making the cursor more flexible and reusable.
+** Lab Work
+*** Fetch records using explicit cursor
+#+begin_src sql
+DECLARE
+    CURSOR stu_cur IS
+        SELECT stu_id, stu_name, score FROM students;
+    v_id students.stu_id%TYPE;
+    v_name students.stu_name%TYPE;
+    v_score students.salary%TYPE;
+BEGIN
+    OPEN stu_cur;
+    LOOP
+        FETCH stu_cur INTO v_id, v_name, v_score;
+        EXIT WHEN stu_cur%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE(v_id || ' ' || v_name || ' ' || v_score);
+    END LOOP;
+    CLOSE stu_cur;
+END;
+/
+#+end_src
+**Output:**
+#+begin_src text
+1 Aakash 78
+2 Sita 82
+3 Prakash 67
+4 Prabin 91
+#+end_src
+*** Fetch students scoring above a specific amount using Parameterized cursor
+#+begin_src sql
+DECLARE
+    CURSOR stu_cur(min_score NUMBER) IS
+        SELECT name, score FROM students WHERE score > min_score;
+
+    v_name students.name%TYPE;
+    v_score students.score%TYPE;
+BEGIN
+    OPEN stu_cur(75);
+    LOOP
+        FETCH stu_cur INTO v_name, v_score;
+        EXIT WHEN stu_cur%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE(v_name || ' scored ' || v_score);
+    END LOOP;
+    CLOSE stu_cur;
+END;
+/
+#+end_src
+**Output:**
+#+begin_src text
+Sita scored 82
+Prabin scored 91
+#+end_src
+** Conclusion
+The lab helped in understanding how cursors provide controlled access to multi-row query results and how parameterized cursors make data retrieval more dynamic by accepting runtime values. Through both examples, the use of opening, fetching, and closing cursors became clear, and we learned practical ways for handling row-wise data processing in PL/SQL.
+#+LATEX: \pagebreak
+* Lab 5: Different types of Triggers in PL/SQL
+** Objectives
+To understand and implement different types of triggers, which are:
+- Before, After triggers
+- Row-level, Statement-level triggers
+- =INSTEAD OF= triggers
+** Theory
+Triggers are stored PL/SQL blocks that run automatically in response to events such as inserting, updating, or deleting data. They help enforce rules, maintain audit logs, and automate actions. Common trigger types include BEFORE and AFTER triggers, row-level and statement-level triggers, and INSTEAD OF triggers used specifically for views. Each of these triggers are described below, with examples
+** Lab Work
+*** =BEFORE= row-level trigger
+Before triggers run before each specified operation. Row-level triggers run for each affected row during a specified operation. These are commonly used inside loops using =FOR EACH ROW= and =:OLD=, =:NEW= keywords for accessing the current row.
+Here, the trigger runs before each row is inserted into the students table.
+#+begin_src sql
+  CREATE OR REPLACE TRIGGER trg_before_insert_student
+  BEFORE INSERT ON students
+  FOR EACH ROW
+  BEGIN
+      DBMS_OUTPUT.PUT_LINE('Before inserting student: ' || :NEW.name);
+  END;
+  /
+#+end_src
+**Output:**
+#+begin_src text
+Before inserting student: Aakash
+#+end_src
+
+*** =AFTER= statement-level trigger 
+After triggers run after a specified statement completes. Statement-level triggers run only once for the specified statement since they only affect one row.
+#+begin_src sql
+CREATE OR REPLACE TRIGGER trg_after_insert_student
+AFTER INSERT ON students
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Insert operation completed on students table.');
+END;
+/
+#+end_src
+**Output:**
+#+begin_src text
+Insert operation completed on students table.
+#+end_src
+
+*** INSTEAD OF trigger (for a view)
+These are used when modifying a view that is not inherently updatable.
+#+begin_src sql
+CREATE OR REPLACE VIEW student_scores AS
+SELECT name, score FROM students;
+
+CREATE OR REPLACE TRIGGER trg_instead_view
+INSTEAD OF INSERT ON student_scores
+FOR EACH ROW
+BEGIN
+    INSERT INTO students(name, score)
+    VALUES(:NEW.name, :NEW.score);
+    DBMS_OUTPUT.PUT_LINE('Inserted through view: ' || :NEW.name);
+END;
+/
+#+end_src
+
+**Output:**
+#+begin_src text
+Inserted through view: Prakash
+#+end_src
+** Conclusion
+This lab showed how different trigger types operate and when they are executed. By experimenting with BEFORE, AFTER, row-level, statement-level, and INSTEAD OF triggers, it became clear how triggers automate database operations and enforce behavior during data changes.
+#+LATEX: \pagebreak
+* Lab 6: Procedures and IN, OUT parameters
+** Objectives
+- To learn about creating PL/SQL procedures that accepts input values and returns processed results using IN, OUT, and IN OUT parameter modes.
+** Theory
+Procedures in PL/SQL allow reusable logic that can accept values and return results. Parameters control how data flows between the caller and the procedure.  
+- =IN= parameters supply values to the procedure.  
+- =OUT= parameters return values back to the caller.  
+- =IN OUT= parameters supply an initial value and return the modified value after execution.  
+This makes procedures flexible for calculations, validations, and data processing.
+
+** Lab Work
+#+begin_src sql
+CREATE OR REPLACE PROCEDURE process_student(
+    p_name     IN     VARCHAR2,
+    p_score    IN OUT NUMBER,
+    p_remark   OUT    VARCHAR2
+)
+IS
+BEGIN
+    p_score := p_score + 5;
+    IF p_score >= 80 THEN
+        p_remark := 'Excellent';
+    ELSE
+        p_remark := 'Good';
+    END IF;
+    DBMS_OUTPUT.PUT_LINE('Processing student: ' || p_name);
+END;
+    
+DECLARE
+    v_score  NUMBER := 74;
+    v_remark VARCHAR2(20);
+BEGIN
+    process_student('Aakash', v_score, v_remark);
+    DBMS_OUTPUT.PUT_LINE('Final Score: ' || v_score);
+    DBMS_OUTPUT.PUT_LINE('Remark: ' || v_remark);
+END;
+#+end_src
+
+**Output:**
+#+begin_example text
+Processing student: Aakash. Final Score: 79. Remark: Good
+#+end_example
+** Conclusion
+This lab demonstrated how procedures can exchange data using IN, OUT, and IN OUT parameters and how input values can be processed, updated, and returned.
+#+LATEX: \pagebreak
+* Lab 7: Optimize function skewing with =DETERMINISTIC= keyword
+** Objectives
+- To learn to create, use functions in PL/SQL, and optimize it using the =DETERMINISTIC= keyword.
+** Theory
+Functions in PL/SQL return a single value and are commonly used for calculations and data processing. They can be called inside SQL statements, procedures, and anonymous blocks.  
+When a function is marked as =DETERMINISTIC=, Oracle assumes it always returns the same result for the same inputs. This allows the database to optimize performance by caching results and avoiding repeated executions, especially useful in queries and large datasets.
+
+** Lab Work
+#+begin_src sql
+CREATE OR REPLACE FUNCTION calc_grade(p_score NUMBER)
+RETURN VARCHAR2
+DETERMINISTIC
+IS
+    v_grade VARCHAR2(10);
+BEGIN
+    IF p_score >= 80 THEN
+        v_grade := 'A';
+    ELSIF p_score >= 60 THEN
+        v_grade := 'B';
+    ELSE
+        v_grade := 'C';
+    END IF;
+
+    RETURN v_grade;
+END;
+/
+    
+DECLARE
+    v_result VARCHAR2(10);
+BEGIN
+    v_result := calc_grade(78);
+    DBMS_OUTPUT.PUT_LINE('Grade: ' || v_result);
+END;
+/
+#+end_src
+**Output:**
+#+begin_example text
+Grade: B
+#+end_example
+** Conclusion
+This lab demonstrated how to create and use PL/SQL functions, showing how they encapsulate reusable logic and return values for use in larger programs. Marking a function as DETERMINISTIC highlighted how Oracle can optimize repeated calls for better performance.
+#+LATEX: \pagebreak
+* Lab 8: Packages
+** Objectives
+- To understand how to create a PL/SQL package, including its specification and body.
+- To learn to group procedures, functions within a package.
+- To implement a package initialization block for setting up global variables when the package is first loaded.
+
+** Theory
+A PL/SQL package is an object that groups logically related PL/SQL types, variables, procedures, and functions. Packages provide a way to modularize code, hide implementation details (encapsulation), and improve performance, as the entire package is loaded into memory on the first call.
+
+A package consists of two parts:
+- *Package Specification*: This is the public interface to the package. It declares the public components (procedures, functions, variables, constants, cursors, and types) that are visible and can be used by other applications or PL/SQL blocks.
+
+- *Package Body*: This part contains the actual implementation for the procedures and functions declared in the specification. It can also contain private declarations that are hidden from the specification and only accessible within the package body.
+
+An optional initialization block can be included at the end of the package body. This block consists of a =BEGIN...END= section and executes only once per session when the package is first referenced. It is commonly used to initialize public or private package variables.
+** Lab Work
+#+begin_src sql
+  CREATE OR REPLACE PACKAGE student_pkg IS
+      FUNCTION get_greeting(p_name VARCHAR2) RETURN VARCHAR2;
+      PROCEDURE show_score(p_name VARCHAR2);
+  END student_pkg;
+  /
+
+  CREATE OR REPLACE PACKAGE BODY student_pkg IS
+
+      FUNCTION get_greeting(p_name VARCHAR2) RETURN VARCHAR2 IS
+      BEGIN
+          RETURN 'Hello ' || p_name;
+      END;
+
+    PROCEDURE show_score(p_name VARCHAR2) IS
+        v_score students.score%TYPE;
+    BEGIN
+        SELECT score INTO v_score
+        FROM students
+        WHERE name = p_name;
+
+        DBMS_OUTPUT.PUT_LINE(p_name || ' scored ' || v_score);
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE('No record found for ' || p_name);
+    END;
+    
+  END student_pkg;
+  /
+
+  DECLARE
+      v_msg VARCHAR2(50);
+  BEGIN
+      v_msg := student_pkg.get_greeting('Aakash');
+      DBMS_OUTPUT.PUT_LINE(v_msg);
+
+      student_pkg.show_score('Aakash');
+  END;
+  /
+#+end_src
+
+**Output:**
+#+begin_src text
+Hello Aakash.
+Aakash scored 85
+#+end_src
+** Conclusion
+This lab provided practical experience in creating a PL/SQL package by defining both its specification and body, demonstrating how procedures and functions can be grouped together for better organization and reuse. It also introduced the package initialization block, showing how global variables can be set up automatically when the package is first loaded. 
